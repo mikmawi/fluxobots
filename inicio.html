@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLUXOBOTS | Tecnología</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- BOTON REGRESAR -->
+
+    <a class="btn-regresar" href="index.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        Regresar
+    </a>
+
+    <!-- HERO -->
+
+    <section class="hero-inicio">
+
+        <div class="hero-contenido">
+
+            <span class="hero-tag">Tecnología del Futuro</span>
+
+            <h1 class="hero-titulo">
+                Innovación<br>Tecnológica<br>Inteligente
+            </h1>
+
+            <p class="hero-desc">
+                Automatización, IA, seguridad, sistemas inteligentes y soluciones premium para transformar tu empresa.
+            </p>
+
+            <div class="hero-botones">
+                <a class="btn-primario" href="pdf/catalogo.pdf" target="_blank">Ver Catálogo</a>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CONTENIDO CON FONDO2 -->
+
+    <div class="fondo-secundario">
+
+    <!-- SERVICIOS -->
+
+    <section class="seccion-servicios" id="servicios">
+
+        <h2 class="seccion-titulo">Nuestros Servicios</h2>
+
+        <div class="grid-servicios">
+
+            <div class="card-servicio card-clickable" id="cardAutomatizacion">
+                <div class="card-icono">🤖</div>
+                <h3>Automatización</h3>
+                <p>Optimizamos tus procesos con tecnología avanzada para maximizar la eficiencia operativa.</p>
+            </div>
+
+            <div class="card-servicio card-clickable" id="cardIA">
+                <div class="card-icono">🧠</div>
+                <h3>Inteligencia Artificial</h3>
+                <p>Soluciones de IA personalizadas que aprenden y se adaptan a las necesidades de tu negocio.</p>
+            </div>
+
+            <div class="card-servicio card-clickable" id="cardSeguridad">
+                <div class="card-icono">🔒</div>
+                <h3>Seguridad Digital</h3>
+                <p>Protegemos tus sistemas con protocolos de seguridad y vigilancia de última generación.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ESTADISTICAS -->
+
+    <section class="seccion-stats">
+
+        <div class="stat">
+            <span class="stat-num">+</span>
+            <span class="stat-label">Clientes</span>
+        </div>
+
+        <div class="stat">
+            <span class="stat-num">+</span>
+            <span class="stat-label">Negocios</span>
+        </div>
+
+        <div class="stat">
+            <span class="stat-num">24/7</span>
+            <span class="stat-label">Soporte</span>
+        </div>
+
+        <div class="stat">
+            <span class="stat-num">∞</span>
+            <span class="stat-label">Innovando el Futuro</span>
+        </div>
+
+    </section>
+
+    <!-- CREACIONES -->
+
+    <section class="seccion-servicios" id="creaciones">
+
+        <h2 class="seccion-titulo">Nuestras Creaciones</h2>
+
+        <div class="grid-servicios">
+
+            <div class="card-servicio">
+                <div class="card-icono">⚡</div>
+                <h3>Agentes IA</h3>
+                <p>Bots inteligentes que trabajan 24/7 atendiendo clientes y automatizando tareas complejas.</p>
+            </div>
+
+            <div class="card-servicio">
+                <div class="card-icono">📊</div>
+                <h3>Dashboards</h3>
+                <p>Paneles de control en tiempo real para visualizar y gestionar tus datos empresariales.</p>
+            </div>
+
+            <div class="card-servicio">
+                <div class="card-icono">🌐</div>
+                <h3>Plataformas Web</h3>
+                <p>Desarrollamos plataformas digitales elegantes, rápidas y totalmente personalizadas.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CTA CONTACTO -->
+
+    <section class="seccion-cta" id="contacto">
+
+        <h2>¿Listo para transformar tu empresa?</h2>
+        <p>Habla con nuestros expertos y descubre cómo podemos ayudarte.</p>
+
+        <a class="btn-primario" href="https://wa.me/593987022614" target="_blank">
+            Iniciar Conversación
+        </a>
+
+    </section>
+
+    </div><!-- fin fondo-secundario -->
+
+    <!-- MODAL AUTOMATIZACION -->
+
+    <div class="modal-overlay" id="modalAuto">
+        <div class="modal-caja">
+            <button class="modal-cerrar" id="modalCerrarAuto">&times;</button>
+            <img src="img/Automatizacion.png" alt="Automatización" class="modal-imagen">
+        </div>
+    </div>
+
+    <!-- MODAL INTELIGENCIA ARTIFICIAL -->
+
+    <div class="modal-overlay" id="modalIA">
+        <div class="modal-caja">
+            <button class="modal-cerrar" id="modalCerrarIA">&times;</button>
+            <img src="img/AI.png" alt="Inteligencia Artificial" class="modal-imagen">
+        </div>
+    </div>
+
+    <!-- MODAL SEGURIDAD -->
+
+    <div class="modal-overlay" id="modalSeg">
+        <div class="modal-caja">
+            <button class="modal-cerrar" id="modalCerrarSeg">&times;</button>
+            <img src="img/seguridad.png" alt="Seguridad Digital" class="modal-imagen">
+        </div>
+    </div>
+
+    <!-- FLECHA SCROLL -->
+
+    <button class="flecha-scroll" id="flechaScroll" aria-label="Bajar">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+    </button>
+
+    <!-- BOTON WHATSAPP -->
+
+    <a class="whatsapp" href="https://wa.me/593987022614" target="_blank">
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#25d366">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        Agente IA
+    </a>
+
+
+<script>
+    const modales = [
+        { card: 'cardAutomatizacion', modal: 'modalAuto',  cerrar: 'modalCerrarAuto' },
+        { card: 'cardIA',             modal: 'modalIA',    cerrar: 'modalCerrarIA'   },
+        { card: 'cardSeguridad',      modal: 'modalSeg',   cerrar: 'modalCerrarSeg'  },
+    ];
+
+    function abrirModal(id) { document.getElementById(id).classList.add('activo'); }
+    function cerrarModal(id) { document.getElementById(id).classList.remove('activo'); }
+    function cerrarTodos() { modales.forEach(m => cerrarModal(m.modal)); }
+
+    modales.forEach(({ card, modal, cerrar }) => {
+        document.getElementById(card).addEventListener('click', () => abrirModal(modal));
+        document.getElementById(cerrar).addEventListener('click', () => cerrarModal(modal));
+        document.getElementById(modal).addEventListener('click', (e) => { if (e.target === document.getElementById(modal)) cerrarModal(modal); });
+    });
+
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarTodos(); });
+
+    const flecha = document.getElementById('flechaScroll');
+
+    function actualizarFlecha() {
+        const cerca = window.innerHeight + window.scrollY >= document.body.scrollHeight - 60;
+        flecha.classList.toggle('oculta', cerca);
+    }
+
+    flecha.addEventListener('click', () => {
+        window.scrollBy({ top: window.innerHeight * 0.85, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', actualizarFlecha);
+    actualizarFlecha();
+</script>
+
+</body>
+
+</html>
