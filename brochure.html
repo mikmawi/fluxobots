@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brochure Fluxobots</title>
+<meta name="description" content="Brochure de Fluxobots: Agente de IA conectado a WhatsApp y OpenAI que atiende, agenda, vende, recuerda y fideliza a tus clientes y pacientes 24/7.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: slides 16:9 de color plano (violeta / blanco / negro / lima), stickers en píldora y cintas diagonales */
+:root{
+  color-scheme:dark;
+  --violet:#5b21f5;
+  --violet-ink:#3a0fb8;
+  --lime:#d6ff3d;
+  --ink:#0e0b14;
+  --paper:#ffffff;
+  --mist:#f1edff;
+  --grey:#5d5873;
+  --pink:#ff8ac8;
+  --orange:#ff7a3d;
+  --sky:#9cc5ff;
+  --green:#2fd27a;
+  --yellow:#ffe14d;
+  --wa-bubble:#dcf8c6;
+  --display:'Unbounded','Arial Black',sans-serif;
+  --body:'Manrope','Segoe UI',Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--ink);color-scheme:dark}
+body{font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased;padding-block:32px 64px;padding-inline:16px}
+
+/* ---------- Barra (solo pantalla) ---------- */
+.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;display:flex;justify-content:center;gap:12px;padding:12px;margin:-32px -16px 24px;background:var(--ink)}
+.toolbar button,.toolbar a{font:700 14px var(--body);border:0;border-radius:999px;padding:11px 22px;cursor:pointer;text-decoration:none;color:var(--ink);background:var(--lime)}
+.toolbar a{background:var(--paper)}
+.toolbar :focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+
+/* ---------- Lienzo ---------- */
+.deck{display:flex;flex-direction:column;align-items:center;gap:32px}
+.frame{width:calc(1200px * var(--s,1));height:calc(675px * var(--s,1))}
+.slide{width:1200px;height:675px;position:relative;overflow:hidden;transform:scale(var(--s,1));transform-origin:top left;border-radius:14px;padding:60px 72px;background:var(--paper)}
+.slide.v{background:var(--violet);color:var(--paper)}
+.slide.k{background:var(--ink);color:var(--paper)}
+.slide.l{background:var(--lime)}
+.slide.m{background:var(--mist)}
+
+/* Pie */
+.foot{position:absolute;left:72px;right:72px;bottom:26px;display:flex;align-items:center;justify-content:space-between;font:600 12px var(--body);letter-spacing:.06em;z-index:4}
+.foot img{height:34px}
+.foot .num{font:700 13px var(--display)}
+.v .foot,.k .foot{color:rgba(255,255,255,.7)}
+
+/* Tipografía */
+.tag{display:inline-block;font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;border-radius:999px;background:var(--ink);color:var(--lime);margin-bottom:20px}
+.v .tag,.k .tag{background:var(--lime);color:var(--ink)}
+h1{font:800 46px/1.08 var(--display);letter-spacing:-.02em;text-wrap:balance}
+h2{font:800 36px/1.12 var(--display);letter-spacing:-.02em;text-wrap:balance}
+h3{font:700 19px/1.25 var(--body)}
+.lead{font-size:18px;line-height:1.55;max-width:560px;color:var(--grey)}
+.v .lead,.k .lead{color:rgba(255,255,255,.82)}
+.hl{background:var(--lime);color:var(--ink);padding:0 .18em;border-radius:.2em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.hv{color:var(--violet)}
+.k .hv{color:var(--lime)}
+
+/* Stickers en píldora */
+.stk{position:absolute;z-index:3;font:700 19px var(--display);padding:12px 24px;border-radius:999px;color:var(--ink);background:var(--c,var(--lime));transform:rotate(var(--r,0deg));white-space:nowrap;box-shadow:0 10px 24px rgba(14,11,20,.18)}
+.stk.w{background:var(--paper)}
+.stk.o{background:transparent;color:var(--paper);border:2px solid var(--paper);box-shadow:none}
+
+/* Cinta diagonal */
+.tape{position:absolute;left:-60px;right:-60px;height:48px;background:var(--ink);color:var(--paper);transform:rotate(var(--r,-4deg));display:flex;align-items:center;gap:28px;padding-left:40px;white-space:nowrap;font:600 16px var(--body);z-index:3}
+.tape b{color:var(--lime);font-weight:800}
+.tape.lime{background:var(--lime);color:var(--ink)}
+.tape.lime b{color:var(--violet)}
+
+/* Anillos */
+.rings{position:absolute;border-radius:50%;border:2px solid rgba(255,255,255,.35);pointer-events:none}
+.rings::before,.rings::after{content:"";position:absolute;border-radius:50%;border:2px solid rgba(255,255,255,.25)}
+.rings::before{inset:60px}
+.rings::after{inset:120px}
+.dark-rings{border-color:rgba(14,11,20,.2)}
+.dark-rings::before,.dark-rings::after{border-color:rgba(14,11,20,.14)}
+
+/* Destellos */
+.spark{position:absolute;width:26px;height:26px;color:var(--paper);transform:rotate(var(--r,0deg))}
+.spark svg{width:100%;height:100%;fill:currentColor}
+
+/* Íconos */
+.ico{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--lime);flex:none}
+.ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- Teléfono ---------- */
+.phone{position:absolute;width:290px;height:580px;border-radius:44px;background:var(--ink);padding:11px;z-index:2;box-shadow:0 30px 60px rgba(14,11,20,.35)}
+.screen{width:100%;height:100%;border-radius:34px;overflow:hidden;background:#efeae2;display:flex;flex-direction:column}
+.wa-head{background:var(--violet);color:#fff;padding:30px 16px 12px;display:flex;align-items:center;gap:10px}
+.wa-head .av{width:34px;height:34px;border-radius:50%;background:var(--lime);display:grid;place-items:center;overflow:hidden}
+.wa-head .av img{width:28px}
+.wa-head b{font-size:14px;display:block}
+.wa-head small{font-size:11px;opacity:.85}
+.chat{flex:1;padding:14px 12px;display:flex;flex-direction:column;gap:9px}
+.msg{max-width:85%;padding:9px 12px 17px;border-radius:16px;font-size:12.5px;line-height:1.4;position:relative;color:#111;font-family:var(--body);font-weight:500}
+.msg time{position:absolute;right:10px;bottom:3px;font-size:9.5px;color:#6b6780}
+.msg.in{align-self:flex-end;background:var(--wa-bubble);border-top-right-radius:4px}
+.msg.ai{align-self:flex-start;background:#fff;border-top-left-radius:4px}
+.msg.ai::before{content:"Agente IA";display:inline-block;font-size:9.5px;font-weight:800;color:var(--ink);background:var(--lime);border-radius:999px;padding:1px 7px;margin-bottom:4px}
+.msg .prod{display:flex;gap:8px;align-items:center;margin-top:6px;padding:6px;border-radius:10px;background:var(--mist)}
+.msg .prod i{width:38px;height:38px;border-radius:9px;background:var(--ink);flex:none}
+.msg .prod b{font-size:11px;display:block}
+.msg .prod span{font-size:11px;color:var(--violet);font-weight:800}
+.msg .btns{display:flex;gap:6px;margin-top:7px}
+.msg .btns span{flex:1;text-align:center;font-size:11px;font-weight:800;color:var(--paper);border-radius:999px;padding:5px 4px;background:var(--violet)}
+
+/* ---------- 01 Portada ---------- */
+.s1 .copy{position:relative;z-index:3;max-width:590px}
+.s1 .logo-top{height:62px;margin-bottom:34px}
+.s1 h1{margin-bottom:20px}
+.s1 .lead{margin-bottom:26px}
+.s1 .rings{width:520px;height:520px;right:30px;top:90px}
+.s1 .phone{right:145px;top:58px;transform:rotate(5deg)}
+
+/* ---------- 02 Problema ---------- */
+.s2 .copy{max-width:470px}
+.s2 .lead{margin-top:18px}
+.s2 .list{position:absolute;right:72px;top:70px;width:540px;display:flex;flex-direction:column;gap:12px}
+.s2 .row{display:flex;align-items:center;justify-content:space-between;border-radius:999px;padding:18px 30px;background:var(--c)}
+.s2 .row h3{font:800 22px var(--display);text-decoration:line-through;text-decoration-thickness:3px}
+.s2 .row span{font:700 14px var(--body)}
+.s2 .row.ok{background:var(--ink);color:var(--paper)}
+.s2 .row.ok h3{text-decoration:none;color:var(--lime)}
+.s2 .note{margin-top:30px;font-size:16px;line-height:1.5;color:var(--grey);max-width:430px}
+.s2 .note b{color:var(--ink)}
+
+/* ---------- 03 Cómo funciona ---------- */
+.s3 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
+.s3 .step{border-radius:28px;padding:28px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.14)}
+.s3 .n{font:800 64px/1 var(--display);color:var(--lime)}
+.s3 h3{margin-top:18px;font-size:20px}
+.s3 p{font-size:15px;line-height:1.55;color:rgba(255,255,255,.75);margin-top:8px}
+.s3 .tape{bottom:96px}
+
+/* ---------- 04 Funciones ---------- */
+.s4 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+.s4 .f{border-radius:28px;padding:22px 24px;background:var(--c);color:var(--ink);display:flex;flex-direction:column;gap:10px;min-height:150px}
+.s4 .f .top{display:flex;align-items:center;justify-content:space-between}
+.s4 .f h3{font:800 22px var(--display)}
+.s4 .f p{font-size:14.5px;line-height:1.45;font-weight:600}
+.s4 .f .ico{width:40px;height:40px}
+.s4 .f .ico svg{width:20px;height:20px}
+
+/* ---------- 05 / 06 Demos ---------- */
+.demo .copy{max-width:560px;position:relative;z-index:3}
+.demo ul{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:16px}
+.demo li{display:flex;gap:14px;align-items:flex-start;font-size:16px;line-height:1.45;color:var(--grey)}
+.demo li b{color:var(--ink)}
+.demo.v li{color:rgba(255,255,255,.8)}
+.demo.v li b{color:var(--paper)}
+.demo.v .ico{background:var(--lime);color:var(--ink)}
+.demo li .ico{width:40px;height:40px}
+.demo li .ico svg{width:20px;height:20px}
+.demo .phone{right:110px;top:34px}
+.demo .rings{width:480px;height:480px;right:15px;top:40px}
+.demo .tape{bottom:104px;--r:-3deg;z-index:1}
+
+/* ---------- 07 Fidelización ---------- */
+.s7 .copy{max-width:560px}
+.s7 .flows{display:flex;flex-direction:column;gap:12px;margin-top:26px}
+.s7 .flow{display:flex;gap:16px;align-items:center;padding:16px 20px;border-radius:999px;background:var(--ink);color:var(--paper)}
+.s7 .flow h3{font-size:16.5px}
+.s7 .flow p{font-size:13.5px;color:rgba(255,255,255,.72);margin-top:2px}
+.s7 .flow .ico{background:var(--lime);color:var(--ink);width:44px;height:44px}
+.s7 .phone{right:110px;top:34px}
+.s7 .rings{width:480px;height:480px;right:15px;top:40px}
+
+/* ---------- 08 Resultados ---------- */
+.s8 .row{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;margin-top:30px}
+.s8 .big{background:var(--paper);color:var(--ink);border-radius:32px;padding:32px 34px;display:flex;flex-direction:column;justify-content:space-between;min-height:330px}
+.s8 .big .k{font:800 110px/1 var(--display);letter-spacing:-.04em;color:var(--violet)}
+.s8 .big h3{font:800 22px var(--display);margin-top:10px}
+.s8 .big p{font-size:15px;line-height:1.5;color:var(--grey)}
+.s8 .big small{font-size:11px;color:var(--grey);margin-top:12px;display:block}
+.s8 .stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.s8 .stat{border-radius:28px;padding:22px;background:var(--c);color:var(--ink)}
+.s8 .stat .k{font:800 34px/1 var(--display)}
+.s8 .stat p{font-size:14px;line-height:1.4;font-weight:600;margin-top:10px}
+
+/* ---------- 09 Tecnología ---------- */
+.s9 .cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:30px}
+.s9 h4{font:700 12px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
+.s9 .cloud{position:relative;height:290px;margin-top:10px}
+.s9 .cloud .stk{font-size:17px;padding:12px 22px}
+.s9 .sec{display:flex;flex-direction:column;gap:16px;margin-top:18px}
+.s9 .sec div{display:flex;gap:14px;align-items:flex-start;font-size:15.5px;line-height:1.45;color:var(--grey)}
+.s9 .sec b{color:var(--ink)}
+.s9 .sec .ico{width:40px;height:40px}
+.s9 .sec .ico svg{width:20px;height:20px}
+
+/* ---------- 10 Cierre ---------- */
+.s10 .copy{max-width:600px;position:relative;z-index:3}
+.s10 .logo-top{height:54px;margin-bottom:30px}
+.s10 h1{font-size:44px;margin-bottom:20px}
+.s10 .qr{position:absolute;right:96px;top:60px;width:350px;background:var(--paper);border-radius:32px;padding:28px;text-align:center;color:var(--ink);transform:rotate(3deg);z-index:2}
+.s10 .qr .lbl{display:inline-block;font:700 12px var(--body);letter-spacing:.14em;color:var(--ink);background:var(--lime);padding:8px 14px;border-radius:999px}
+.s10 .qr img{width:230px;height:230px;margin:18px auto 14px;display:block}
+.s10 .qr p{font-size:15px;line-height:1.45;color:var(--grey)}
+.s10 .qr p b{color:var(--ink)}
+.s10 .bar{position:absolute;left:72px;right:72px;bottom:70px;display:flex;align-items:center;background:var(--paper);border-radius:999px;padding:10px;z-index:3}
+.s10 .bar a{flex:1;display:flex;align-items:center;gap:14px;padding:6px 18px;color:var(--ink);text-decoration:none;font:800 20px var(--display)}
+.s10 .bar a + a{border-left:2px solid var(--violet)}
+.s10 .bar small{display:block;font:600 12px var(--body);color:var(--grey);letter-spacing:0}
+.s10 .bar .ico{background:var(--violet);color:var(--paper)}
+.s10 .foot{bottom:22px}
+
+/* ---------- Impresión / PDF ---------- */
+@page{size:1200px 675px;margin:0}
+@media print{
+  html,body{background:none;padding:0}
+  .toolbar{display:none}
+  .deck{gap:0;display:block}
+  .frame{width:1200px;height:675px;break-after:page;page-break-after:always}
+  .frame:last-child{break-after:auto;page-break-after:auto}
+  .slide{transform:none;border-radius:0}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="window.print()">Descargar PDF</button>
+  <a href="https://wa.me/593984107589" target="_blank" rel="noopener">Hablar por WhatsApp</a>
+</div>
+
+<!-- Íconos reutilizables -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9 15l2 2 4-4"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></symbol>
+    <symbol id="i-mega" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></symbol>
+    <symbol id="i-img" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></symbol>
+    <symbol id="i-hand" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m16 11 2 2 4-4"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></symbol>
+    <symbol id="i-steth" viewBox="0 0 24 24"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6 6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6 6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><path d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+    <symbol id="i-brain" viewBox="0 0 24 24"><path d="M12 5a3 3 0 1 0-6 .1 4 4 0 0 0-2.5 5.8A4 4 0 0 0 6 18a4 4 0 0 0 6 1V5zM12 5a3 3 0 1 1 6 .1 4 4 0 0 1 2.5 5.8A4 4 0 0 1 18 18a4 4 0 0 1-6 1"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol>
+  </defs>
+</svg>
+
+<main class="deck">
+
+<!-- ============ 01 · PORTADA ============ -->
+<div class="frame"><section class="slide v s1">
+  <div class="copy">
+    <img class="logo-top" src="img/logo-blanco.png" alt="Fluxobots">
+    <div class="tag">Agente de IA · WhatsApp + OpenAI</div>
+    <h1>¿Y si tu negocio pudiera <span class="hl">vender y atender</span> mientras duermes?</h1>
+    <p class="lead">Tu agente de IA en WhatsApp responde, agenda citas, ofrece tus productos y servicios, envía recordatorios y fideliza a tus clientes y pacientes. 24/7, en piloto automático.</p>
+  </div>
+
+  <div class="rings"></div>
+  <div class="phone"><div class="screen">
+    <div class="wa-head"><div class="av"><img src="img/logo-transparente.png" alt=""></div><div><b>Tu negocio</b><small>en línea · responde al instante</small></div></div>
+    <div class="chat">
+      <div class="msg in">Hola, ¿tienen turno para limpieza dental este sábado? <time>23:48</time></div>
+      <div class="msg ai">¡Hola Ana! Sí, tengo libre a las 9:00 y a las 11:30. ¿Cuál prefieres?
+        <div class="btns"><span>9:00</span><span>11:30</span></div><time>23:48</time></div>
+      <div class="msg in">11:30 porfa 🙌 <time>23:49</time></div>
+      <div class="msg ai">¡Listo! Te reservé el sábado a las 11:30. Te enviaré un recordatorio el viernes. <time>23:49</time></div>
+    </div>
+  </div></div>
+
+  <span class="stk" style="left:690px;top:70px;--r:-14deg">Atiende</span>
+  <span class="stk" style="right:40px;top:52px;--r:12deg;--c:var(--pink)">Agenda</span>
+  <span class="stk w" style="right:28px;top:300px;--r:-9deg">Vende</span>
+  <span class="stk" style="left:640px;top:330px;--r:10deg;--c:var(--orange)">Recuerda</span>
+  <span class="stk" style="right:70px;bottom:120px;--r:7deg;--c:var(--sky)">Fideliza</span>
+  <span class="stk o" style="left:668px;bottom:96px;--r:-6deg">24/7</span>
+  <span class="spark" style="left:640px;top:200px;--r:-12deg"><svg><use href="#i-spark"/></svg></span>
+  <span class="spark" style="right:58px;top:200px;--r:14deg"><svg><use href="#i-spark"/></svg></span>
+
+  <div class="foot"><span>COMERCIO · CLÍNICAS · SERVICIOS</span><span>www.fluxobots.com</span></div>
+</section></div>
+
+<!-- ============ 02 · EL PROBLEMA ============ -->
+<div class="frame"><section class="slide m s2">
+  <div class="copy">
+    <div class="tag">El problema</div>
+    <h2>Un cliente que espera es una venta que <span class="hv">se va.</span></h2>
+    <p class="lead">Y un paciente que olvida su cita es una agenda vacía. Esto es lo que tu agente tacha de tu lista desde el primer día.</p>
+    <p class="note"><b>Fluxobots lo resuelve desde el mismo WhatsApp que ya usas.</b> Sin apps nuevas para tus clientes.</p>
+  </div>
+  <div class="list">
+    <div class="row" style="--c:var(--yellow)"><h3>Chats sin responder</h3><span>fuera de horario</span></div>
+    <div class="row" style="--c:var(--orange)"><h3>Citas olvidadas</h3><span>huecos en agenda</span></div>
+    <div class="row" style="--c:var(--pink)"><h3>Clientes que no vuelven</h3><span>sin seguimiento</span></div>
+    <div class="row" style="--c:var(--sky)"><h3>Confirmar uno por uno</h3><span>horas al teléfono</span></div>
+    <div class="row" style="--c:var(--green)"><h3>Promos que nadie lee</h3><span>correos ignorados</span></div>
+    <div class="row ok"><h3>Tu agente en WhatsApp</h3><span>24/7</span></div>
+  </div>
+  <div class="foot"><img src="img/logo-transparente.png" alt="Fluxobots"><span class="num">02</span></div>
+</section></div>
+
+<!-- ============ 03 · CÓMO FUNCIONA ============ -->
+<div class="frame"><section class="slide k s3">
+  <div class="tag">Cómo funciona</div>
+  <h2>Listo para trabajar en <span class="hv">3 pasos.</span></h2>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><h3>Conectamos tu WhatsApp</h3><p>Usamos el número de tu negocio. Tus clientes siguen escribiendo donde siempre.</p></div>
+    <div class="step"><div class="n">2</div><h3>Entrenamos a tu agente</h3><p>Le enseñamos tu catálogo, precios, horarios, servicios y el tono de tu marca, con la IA de OpenAI.</p></div>
+    <div class="step"><div class="n">3</div><h3>Atiende 24/7</h3><p>Responde, agenda, vende y hace seguimiento. Cuando hace falta, te pasa la conversación a ti.</p></div>
+  </div>
+  <div class="tape lime" style="--r:-2deg;bottom:140px"><span><b>✦</b> Nosotros lo configuramos</span><span><b>✦</b> Tú no necesitas saber de tecnología</span><span><b>✦</b> Nosotros lo configuramos</span><span><b>✦</b> Tú no necesitas saber de tecnología</span></div>
+  <div class="foot"><img src="img/logo-blanco.png" alt="Fluxobots"><span class="num">03</span></div>
+</section></div>
+
+<!-- ============ 04 · QUÉ HACE ============ -->
+<div class="frame"><section class="slide k s4">
+  <div class="tag">Qué hace tu agente</div>
+  <h2>No es un chatbot de preguntas. Es tu <span class="hv">mejor empleado.</span></h2>
+  <div class="grid">
+    <div class="f" style="--c:var(--lime)"><div class="top"><h3>Atiende</h3><span class="ico"><svg><use href="#i-chat"/></svg></span></div><p>Responde al instante, entiende texto y audios y resuelve dudas frecuentes.</p></div>
+    <div class="f" style="--c:var(--pink)"><div class="top"><h3>Agenda</h3><span class="ico"><svg><use href="#i-cal"/></svg></span></div><p>Muestra horarios libres, reserva la cita y la registra en tu calendario.</p></div>
+    <div class="f" style="--c:var(--sky)"><div class="top"><h3>Vende</h3><span class="ico"><svg><use href="#i-bag"/></svg></span></div><p>Ofrece productos y servicios con fotos, precios y detalles, y cierra el pedido.</p></div>
+    <div class="f" style="--c:var(--orange)"><div class="top"><h3>Recuerda</h3><span class="ico"><svg><use href="#i-bell"/></svg></span></div><p>Envía recordatorios de citas, pagos y controles para reducir ausencias.</p></div>
+    <div class="f" style="--c:var(--yellow)"><div class="top"><h3>Campañas</h3><span class="ico"><svg><use href="#i-mega"/></svg></span></div><p>Promociones y avisos masivos y segmentados a tu base de contactos.</p></div>
+    <div class="f" style="--c:var(--green)"><div class="top"><h3>Fideliza</h3><span class="ico"><svg><use href="#i-heart"/></svg></span></div><p>Seguimiento post-venta y post-consulta, y recupera clientes inactivos.</p></div>
+  </div>
+  <div class="foot"><img src="img/logo-blanco.png" alt="Fluxobots"><span class="num">04</span></div>
+</section></div>
+
+<!-- ============ 05 · DEMO COMERCIO ============ -->
+<div class="frame"><section class="slide demo s5">
+  <div class="copy">
+    <div class="tag">Para comercios</div>
+    <h2>Tu catálogo, con <span class="hv">superpoderes.</span></h2>
+    <ul>
+      <li><span class="ico"><svg><use href="#i-img"/></svg></span><span><b>Venta visual e inmediata.</b> Envía fotos, fichas y precios en tiempo real para no perder el impulso de compra.</span></li>
+      <li><span class="ico"><svg><use href="#i-cart"/></svg></span><span><b>Cierra el pedido.</b> Confirma stock, entrega o retiro en tienda y recupera carritos abandonados.</span></li>
+      <li><span class="ico"><svg><use href="#i-hand"/></svg></span><span><b>Te pasa la venta lista.</b> Si el cliente necesita algo muy específico, lo pre-califica y te lo transfiere.</span></li>
+    </ul>
+  </div>
+  <div class="rings dark-rings"></div>
+  <div class="phone"><div class="screen">
+    <div class="wa-head"><div class="av"><img src="img/logo-transparente.png" alt=""></div><div><b>Relojería Central</b><small>en línea</small></div></div>
+    <div class="chat">
+      <div class="msg in">Hola, ¿tienen stock del reloj negro? ¿Cuánto cuesta? <time>14:02</time></div>
+      <div class="msg ai">¡Hola Carlos! Sí, nos quedan las últimas 3 unidades:
+        <div class="prod"><i></i><div><b>Reloj Classic Black</b><span>$49.00</span></div></div><time>14:02</time></div>
+      <div class="msg ai">¿Te lo enviamos mañana o prefieres retirarlo en tienda?
+        <div class="btns"><span>Envío</span><span>Retiro</span></div><time>14:02</time></div>
+      <div class="msg in">Envío porfa 👍 <time>14:03</time></div>
+    </div>
+  </div></div>
+  <span class="stk" style="right:48px;top:120px;--r:10deg;--c:var(--pink)">$49 ✓</span>
+  <div class="tape"><span><b>✦</b> Tiendas de ropa</span><span><b>✦</b> Restaurantes</span><span><b>✦</b> E-commerce</span><span><b>✦</b> Ferreterías</span><span><b>✦</b> Farmacias</span><span><b>✦</b> Tiendas de tecnología</span><span><b>✦</b> Panaderías</span></div>
+  <div class="foot"><img src="img/logo-transparente.png" alt="Fluxobots"><span class="num">05</span></div>
+</section></div>
+
+<!-- ============ 06 · DEMO SALUD ============ -->
+<div class="frame"><section class="slide v demo s6">
+  <div class="copy">
+    <div class="tag">Para clínicas y salud</div>
+    <h2>Agenda llena, <span class="hl">pacientes atendidos.</span></h2>
+    <ul>
+      <li><span class="ico"><svg><use href="#i-cal"/></svg></span><span><b>Agendamiento automático.</b> Muestra la disponibilidad de cada doctor o especialidad y reserva el turno.</span></li>
+      <li><span class="ico"><svg><use href="#i-bell"/></svg></span><span><b>Recordatorios y confirmaciones.</b> Avisa antes de la cita y permite reprogramar en el mismo chat.</span></li>
+      <li><span class="ico"><svg><use href="#i-steth"/></svg></span><span><b>Menos carga para recepción.</b> Responde precios, ubicación, preparación y preguntas frecuentes.</span></li>
+    </ul>
+  </div>
+  <div class="rings"></div>
+  <div class="phone"><div class="screen">
+    <div class="wa-head"><div class="av"><img src="img/logo-transparente.png" alt=""></div><div><b>Clínica Dental</b><small>en línea</small></div></div>
+    <div class="chat">
+      <div class="msg in">Hola, deseo agendar una cita mañana con traumatología <time>08:15</time></div>
+      <div class="msg ai">¡Claro, Mauricio! Mañana tengo disponibilidad a las 10:00 y a las 16:00. ¿Cuál te viene mejor?
+        <div class="btns"><span>10:00</span><span>16:00</span></div><time>08:15</time></div>
+      <div class="msg in">A las 16:00 está perfecto <time>08:16</time></div>
+      <div class="msg ai">¡Reservado! El Dr. Carlos te atenderá mañana a las 16:00. Te enviaré un recordatorio por aquí. <time>08:16</time></div>
+    </div>
+  </div></div>
+  <span class="stk" style="left:72px;top:448px;--r:-4deg">Cita agendada ✓</span>
+  <div class="tape"><span><b>✦</b> Odontología</span><span><b>✦</b> Consultorios médicos</span><span><b>✦</b> Estética</span><span><b>✦</b> Fisioterapia</span><span><b>✦</b> Laboratorios</span><span><b>✦</b> Veterinarias</span><span><b>✦</b> Psicología</span></div>
+  <div class="foot"><img src="img/logo-blanco.png" alt="Fluxobots"><span class="num">06</span></div>
+</section></div>
+
+<!-- ============ 07 · FIDELIZACIÓN ============ -->
+<div class="frame"><section class="slide l s7">
+  <div class="copy">
+    <div class="tag">Seguimiento y fidelización</div>
+    <h2>La lealtad no se pide. <span class="hv">Se cuida.</span></h2>
+    <div class="flows">
+      <div class="flow"><span class="ico"><svg><use href="#i-heart"/></svg></span><div><h3>Post-venta y post-consulta</h3><p>Pregunta cómo le fue, pide una reseña y resuelve dudas.</p></div></div>
+      <div class="flow"><span class="ico"><svg><use href="#i-refresh"/></svg></span><div><h3>Recupera clientes y pacientes inactivos</h3><p>Escribe a quien no vuelve desde hace 6 o 12 meses.</p></div></div>
+      <div class="flow"><span class="ico"><svg><use href="#i-gift"/></svg></span><div><h3>Tratamientos y recompras</h3><p>Recuerda controles pendientes, cumpleaños y reposiciones.</p></div></div>
+    </div>
+  </div>
+  <div class="rings dark-rings"></div>
+  <div class="phone"><div class="screen">
+    <div class="wa-head"><div class="av"><img src="img/logo-transparente.png" alt=""></div><div><b>Tu negocio</b><small>en línea</small></div></div>
+    <div class="chat">
+      <div class="msg ai">Hola Mauricio 😊 Notamos que no agendaste tu sesión de refuerzo. ¿Te ayudamos con un turno esta semana? <time>07:00</time></div>
+      <div class="msg in">¡Me olvidé por el trabajo! ¿Me pueden agendar? <time>07:02</time></div>
+      <div class="msg ai">¡Te entiendo, suele pasar! ¿Te queda mejor mañana a las 17:00 o el jueves temprano?
+        <div class="btns"><span>Mañana</span><span>Jueves</span></div><time>07:02</time></div>
+      <div class="msg in">Mañana está bien, gracias ❤️ <time>07:03</time></div>
+    </div>
+  </div></div>
+  <span class="stk" style="left:440px;top:478px;--r:-6deg;--c:var(--ink);color:var(--lime)">6 meses sin visita</span>
+  <span class="stk" style="right:170px;bottom:40px;--r:-6deg;--c:var(--pink)">Paciente recuperado</span>
+  <div class="foot"><img src="img/logo-transparente.png" alt="Fluxobots"><span class="num">07</span></div>
+</section></div>
+
+<!-- ============ 08 · CAMPAÑAS Y RESULTADOS ============ -->
+<div class="frame"><section class="slide v s8">
+  <div class="tag">Campañas y rentabilidad</div>
+  <h2>Más capacidad de atención, <span class="hl">sin duplicar tu equipo.</span></h2>
+  <div class="row">
+    <div class="big">
+      <div><div class="k">98%</div><h3>de apertura en WhatsApp</h3></div>
+      <div><p>Los correos masivos casi no se leen. Tus campañas por WhatsApp, asistidas por IA, llegan a donde tus clientes sí miran.</p><small>* Promedio de la industria reportado para mensajes de WhatsApp.</small></div>
+    </div>
+    <div class="stats">
+      <div class="stat" style="--c:var(--lime)"><div class="k">24/7</div><p>Atención los 365 días, incluso feriados y madrugadas.</p></div>
+      <div class="stat" style="--c:var(--pink)"><div class="k">&lt;5 s</div><p>Para responder a cada mensaje entrante.</p></div>
+      <div class="stat" style="--c:var(--sky)"><div class="k">∞</div><p>Conversaciones a la vez, sin filas ni esperas.</p></div>
+      <div class="stat" style="--c:var(--orange)"><div class="k">1</div><p>Solo número de WhatsApp para vender, agendar y fidelizar.</p></div>
+    </div>
+  </div>
+  <div class="foot"><img src="img/logo-blanco.png" alt="Fluxobots"><span class="num">08</span></div>
+</section></div>
+
+<!-- ============ 09 · INTEGRACIONES Y CONTROL ============ -->
+<div class="frame"><section class="slide s9">
+  <div class="tag">Tecnología</div>
+  <h2>Conectado a lo que ya usas. <span class="hv">Con el control en tus manos.</span></h2>
+  <div class="cols">
+    <div>
+      <h4>Integraciones</h4>
+      <div class="cloud">
+        <span class="stk" style="left:0;top:16px;--r:-6deg;--c:var(--green)">WhatsApp Business</span>
+        <span class="stk" style="left:270px;top:6px;--r:8deg;--c:var(--ink);color:var(--paper)">OpenAI</span>
+        <span class="stk" style="left:30px;top:96px;--r:5deg;--c:var(--sky)">Google Calendar</span>
+        <span class="stk" style="left:290px;top:92px;--r:-9deg;--c:var(--yellow)">Sheets / CRM</span>
+        <span class="stk" style="left:0;top:180px;--r:-3deg;--c:var(--pink)">Tu catálogo</span>
+        <span class="stk" style="left:200px;top:186px;--r:7deg;--c:var(--lime)">Tu sistema de citas</span>
+      </div>
+    </div>
+    <div>
+      <h4>Tú tienes el control</h4>
+      <div class="sec">
+        <div><span class="ico"><svg><use href="#i-shield"/></svg></span><span><b>Información protegida.</b> Datos de clientes y pacientes con acceso restringido a tu negocio.</span></div>
+        <div><span class="ico"><svg><use href="#i-brain"/></svg></span><span><b>Responde con tu información.</b> El agente se entrena con tus datos, precios y políticas.</span></div>
+        <div><span class="ico"><svg><use href="#i-hand"/></svg></span><span><b>Traspaso a humano.</b> Tú o tu equipo pueden tomar la conversación cuando quieran.</span></div>
+        <div><span class="ico"><svg><use href="#i-link"/></svg></span><span><b>Sin cambiar de número.</b> Tus clientes te siguen escribiendo al mismo WhatsApp.</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><img src="img/logo-transparente.png" alt="Fluxobots"><span class="num">09</span></div>
+</section></div>
+
+<!-- ============ 10 · CIERRE ============ -->
+<div class="frame"><section class="slide v s10">
+  <div class="copy">
+    <img class="logo-top" src="img/logo-blanco.png" alt="Fluxobots">
+    <h1>El empleado del mes <span class="hl">ya está listo</span> para empezar.</h1>
+    <p class="lead">No toma café, no llega tarde y ama atender a tus clientes y pacientes. ¿Hacemos una prueba?</p>
+  </div>
+  <div class="qr">
+    <span class="lbl">PRUÉBALO EN VIVO</span>
+    <img src="img/qr-whatsapp.svg" alt="Código QR para escribir a Fluxobots por WhatsApp">
+    <p><b>Escanea y habla con nuestro propio Agente de IA</b><br>para verlo trabajar en tiempo real.</p>
+  </div>
+  <span class="spark" style="right:470px;top:70px;--r:-14deg"><svg><use href="#i-spark"/></svg></span>
+  <span class="spark" style="right:60px;top:430px;--r:12deg"><svg><use href="#i-spark"/></svg></span>
+  <div class="bar">
+    <a href="https://wa.me/593984107589" target="_blank" rel="noopener"><span class="ico"><svg><use href="#i-phone"/></svg></span><span>098 410 7589<small>WhatsApp · +593 98 410 7589</small></span></a>
+    <a href="https://www.fluxobots.com" target="_blank" rel="noopener"><span class="ico"><svg><use href="#i-globe"/></svg></span><span>fluxobots.com<small>Planes a la medida de tu negocio</small></span></a>
+  </div>
+  <div class="foot"><span>ATIENDE · AGENDA · VENDE · FIDELIZA</span><span class="num">10</span></div>
+</section></div>
+
+</main>
+
+<script>
+  // Escala las slides para que quepan en pantallas pequeñas
+  function fit(){
+    var s=Math.min(1,(document.documentElement.clientWidth-32)/1200);
+    document.documentElement.style.setProperty('--s',s);
+  }
+  window.addEventListener('resize',fit);fit();
+  window.addEventListener('beforeprint',function(){document.documentElement.style.setProperty('--s',1)});
+  window.addEventListener('afterprint',fit);
+</script>
+</body>
+</html>
