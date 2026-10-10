@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/tienda/:path*", "destination": "https://app.fluxobots.com/tienda/:path*" },
-    { "source": "/pedido/:path*", "destination": "https://app.fluxobots.com/pedido/:path*" }
+    { "source": "/tienda/:path(.*)", "destination": "https://app.fluxobots.com/tienda/:path" },
+    { "source": "/pedido/:path(.*)", "destination": "https://app.fluxobots.com/pedido/:path" }
   ]
 }
