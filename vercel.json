@@ -1,6 +1,9 @@
 {
+  "redirects": [
+    { "source": "/tienda/:path(.*)", "destination": "/t/:path", "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/tienda/:path(.*)", "destination": "https://app.fluxobots.com/tienda/:path" },
+    { "source": "/t/:path(.*)", "destination": "https://app.fluxobots.com/t/:path" },
     { "source": "/pedido/:path(.*)", "destination": "https://app.fluxobots.com/pedido/:path" }
   ]
 }
